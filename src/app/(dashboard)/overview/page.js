@@ -14,15 +14,27 @@ const OverviewPage = () => {
     const [loading, setLoading] = useState(true);
     const [activeTab, setActiveTab] = useState('Thermals');
 
+
     useEffect(() => {
+        const savedLocation = localStorage.getItem('selectedLocation');
         const fetchLocations = async () => {
             const data = await fetchDataCenters();
             setLocations(data);
             setLoading(false);
         };
 
+        if (savedLocation) {
+            setSelectedLocation(savedLocation);
+        }
+
         fetchLocations();
     }, []);
+
+    useEffect(() => {
+        if (selectedLocation) {
+            localStorage.setItem('selectedLocation', selectedLocation);
+        }
+    }, [selectedLocation]);
 
     const handleLocationChange = (e) => {
         setSelectedLocation(e.target.value);

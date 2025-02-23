@@ -1,10 +1,16 @@
-http://127.0.0.1:5000/api/device-alarms 
+'use server';
 
-"use server"
 export default async function fetchAlarms() {
-    const res = await fetch("http://127.0.0.1:5000/api/device-alarms");
-    if (!res.ok) throw new Error("Failed to fetch data");
-    // console.log(res)
-    return res.json();
-
+    try {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_API}/api/device-alarms`);
+        if (!response.ok) {
+            throw new Error('Failed to fetch data');
+        }
+        const data = await response.json();
+        // Return only the first 50 items if data is an array
+        return Array.isArray(data) ? data.slice(0, 100) : data;
+    } catch (error) {
+        console.error('Error fetching data:', error);
+        return [];
+    }
 }

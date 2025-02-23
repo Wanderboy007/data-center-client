@@ -11,24 +11,17 @@ const filterOptions = [
     "source",
     "sourceState",
     "alertState",
-    "collectionId",
     "location",
     "device",
     "rack",
     "circuit",
     "tenant",
-    "tenantId",
     "groupPath",
     "alarmType",
     "alarmTime",
     "duration",
     "acknowledged",
-    "lastUpdateTime",
-    "fromState",
-    "toState",
-    "message",
-    "highLimit",
-    "ackRequired"
+    "message"
 ];
 
 export default function AlarmsPage() {
@@ -72,7 +65,7 @@ export default function AlarmsPage() {
 
     return (
         <div className="flex flex-col items-center p-6 bg-gray-100 min-h-screen">
-            <div className="w-full max-w-4xl bg-white p-8 shadow-lg rounded-xl">
+            <div className="w-full max-w-6xl bg-white p-8 shadow-lg rounded-xl">
                 <h1 className="text-3xl font-bold mb-6 text-gray-800">Alarms</h1>
 
                 <div className="flex gap-4 mb-6">
@@ -125,6 +118,34 @@ export default function AlarmsPage() {
                         </Button>
                     </div>
                 ))}
+
+                <div className="overflow-x-auto">
+                    <table className="min-w-full bg-white border rounded-lg">
+                        <thead>
+                            <tr className="bg-gray-50">
+                                {filterOptions.map((option) => (
+                                    <th key={option} className="p-3 text-left text-sm font-semibold text-gray-700">{option}</th>
+                                ))}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {filteredAlarms.map((alarm, index) => (
+                                <tr key={index} className="hover:bg-gray-100 border-b">
+                                    {filterOptions.map((option) => (
+                                        <td key={option} className="p-3 text-sm text-gray-800">{alarm[option] || alarm[option.toLowerCase()] || 'N/A'}</td>
+                                    ))}
+                                </tr>
+                            ))}
+                            {filteredAlarms.length === 0 && (
+                                <tr>
+                                    <td colSpan={filterOptions.length} className="p-6 text-center text-gray-500">
+                                        No alarms found.
+                                    </td>
+                                </tr>
+                            )}
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     );

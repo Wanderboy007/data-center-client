@@ -4,6 +4,8 @@ import { Button } from "@/components/ui/button";
 import fetchFilter from "@/app/actions/fetchFilter";
 import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
+import Link from 'next/link';
+import { useRouter } from "next/navigation";
 
 const filterOptions = [
     "Category",
@@ -16,6 +18,7 @@ export default function DevicesPage() {
     const [devicesData, setDevicesData] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
     const [filters, setFilters] = useState([]);
+    const router = useRouter();
 
     useEffect(() => {
         fetchFilter().then(setDevicesData).catch(console.error);
@@ -45,6 +48,7 @@ export default function DevicesPage() {
         });
         return matchesSearch && matchesFilters;
     });
+    console.log(filteredDevices)
 
     const getAttributeOptions = (attribute) => {
         const uniqueValues = [...new Set(devicesData.map((device) => device[attribute]).filter(Boolean))];
@@ -118,9 +122,15 @@ export default function DevicesPage() {
                         </thead>
                         <tbody>
                             {filteredDevices.map((device, index) => (
-                                <tr key={index} className="hover:bg-gray-100 border-b">
+                                <tr
+                                    key={index}
+                                    className="hover:bg-gray-100 border-b cursor-pointer"
+                                    onClick={() => router.push(`/devices/${encodeURIComponent(device.DeviceName)}`)}
+                                >
                                     {filterOptions.map((option) => (
-                                        <td key={option} className="p-3 text-sm text-gray-800">{device[option]}</td>
+                                        <td key={option} className="p-3 text-sm text-gray-800">
+                                            {device[option]}
+                                        </td>
                                     ))}
                                 </tr>
                             ))}

@@ -2,7 +2,7 @@
 
 export async function fetchDataCenters() {
     try {
-        const response = await fetch('http://127.0.0.1:5000/api/device-list');
+        const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_API}/api/device-list`);
         if (!response.ok) {
             throw new Error('Failed to fetch data');
         }
